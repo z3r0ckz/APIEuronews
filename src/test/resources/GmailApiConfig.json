@@ -1,0 +1,6 @@
+{
+  "headerHostValue": "gmail.googleapis.com",
+  "allMessagesEndPoint": "/gmail/v1/users/me/messages/",
+  "messagesQueryEndPoint": "/gmail/v1/users/me/messages?q=euronews label: unread",
+  "markMessagesAsReadRequestBody": "{\"removeLabelIds\": [\"UNREAD\"]}"
+}

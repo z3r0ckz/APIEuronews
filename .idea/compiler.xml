@@ -6,8 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="APIEuronews" />
+        <module name="Task3" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="APIEuronews" target="19" />
+    </bytecodeTargetLevel>
   </component>
 </project>

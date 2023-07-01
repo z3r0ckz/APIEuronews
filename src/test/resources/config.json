@@ -1,0 +1,10 @@
+{
+  "euroNewsMainPage": "https://euronews.com/",
+  "serviceEndpoint": "https://gmail.googleapis.com",
+  "numberOfSecondsToWait": "10",
+  "grantType": "authorization_code",
+  "redirectUri": "http://localhost:8080",
+  "emailsEndpoint": "/gmail/v1/users/me/messages/",
+  "euroNewsEmail": "?q=euronews label:unread&maxResults=1&orderBy=reverse:time",
+  "access_token": "access_token"
+}
