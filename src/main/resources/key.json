@@ -1,10 +1,9 @@
 {
-  "client_id":"<client id>",
+  "client_id":"113286798232-2nbomrbd6ael5j8lcfp8n2p3a0ek16hr.apps.googleusercontent.com",
   "project_id": "testa1qa",
-  "client_secret":"<client secret>",
+  "client_secret":"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",
   "redirect_uris":"http://localhost",
   "scope" : "https://www.googleapis.com/auth/gmail.readonly",
-  "tokenUrl" : "https://accounts.google.com/o/oauth2/token",
-  "code" : "<code>",
-  "token" : "<token>"
+  "code" : "4/0AbUR2VOjb-zqfZXtFRtmZNfgxHCCI9-P83425kYnYhfvAF6fz6jHwU4AGzCffSPzLaqDzA",
+  "token" : "ya29.a0AWY7CkmduUBepGDOtSfonNOPBqANWVLbp4V2HoqmMhFAeri1PHL47mqI8CQJe9bR--64H8F9YhoRFHs3lNYx7dv__jsOF-6Jb_3aJpUq9Lj__oBf9XF7jNvCSXnwodSEL1jg3SaSjrhu84Nm2iNKQ_HGNQKyaCgYKASMSARMSFQG1tDrp_gtfDm6CL-l1KNFrG5cnzQ0163"
 }
