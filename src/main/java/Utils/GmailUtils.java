@@ -7,6 +7,8 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -19,15 +21,23 @@ public class GmailUtils {
     private static final ISettingsFile apiConfig = new JsonSettingsFile("GmailApiConfig.json");
     protected static ISettingsFile apiKey = new JsonSettingsFile("key.json");
     private final static String token = apiKey.getValue("/token").toString();
+
+    protected static Logger logger = LogManager.getLogger(GmailUtils.class);
     private static HttpRequest getBaseRequestSpecification() {
         return Unirest.get(apiConfig.getValue("/headerHostValue").toString())
                 .header("Authorization", "Bearer " + token);
     }
 
-    public static String getUrlToConfirmSubscription() throws AuthenticationException {
-        String messageBody = getBodyMessageOfId(getIdOfUnreadEuronewsEmails().get(0));
-        return StringUtils.extractUrlFromHtml(messageBody);
+    public static String getUrlToConfirmSubscription() {
+        try {
+            String messageBody = getBodyMessageOfId(getIdOfUnreadEuronewsEmails().get(0));
+            return StringUtils.extractUrlFromHtml(messageBody);
+        } catch (AuthenticationException e) {
+            logger.error(e);
+            return "error get url confirm subscription";
+        }
     }
+
 
     private static String getBodyMessageOfId(String mailId) {
         getBaseRequestSpecification();
@@ -63,13 +73,19 @@ public class GmailUtils {
         return messageIds;
     }
 
-    public static Integer markAllEmailsAsRead() throws AuthenticationException {
-        List<String> unreadMessagesIds = getIdOfUnreadEuronewsEmails();
-        for (String id : unreadMessagesIds) {
-            markMessageAsRead(id);
+    public static Integer markAllEmailsAsRead() {
+        try {
+            List<String> unreadMessagesIds = getIdOfUnreadEuronewsEmails();
+            for (String id : unreadMessagesIds) {
+                markMessageAsRead(id);
+            }
+            return unreadMessagesIds.size();
+        } catch (AuthenticationException e) {
+           logger.error(e);
+            return 0;
         }
-        return unreadMessagesIds.size();
     }
+
     private static void markMessageAsRead(String id) {
         getBaseRequestSpecification();
         HttpResponse<String> response = Unirest.post(apiConfig.getValue("/allMessagesEndPoint").toString() + id + "/modify")
@@ -78,21 +94,26 @@ public class GmailUtils {
                 .asString();
     }
 
-    public static boolean isNewMailExists() throws InterruptedException {
+    public static boolean isNewMailExists() {
         int numberOfSecondsToWait = Integer.parseInt(configData.getValue("/numberOfSecondsToWaitForNewMail").toString());
         for (int i = 0; i < numberOfSecondsToWait; i++) {
-            HttpResponse<String> response = Unirest.get(apiConfig.getValue("/messagesQueryEndPoint").toString())
-                    .header("Authorization", "Bearer " + token)
-                    .asString();
-            getBaseRequestSpecification();
-            int numberOfUnreadEmails = new JSONObject(response.getBody()).getInt("resultSizeEstimate");
+            try {
+                HttpResponse<String> response = Unirest.get(apiConfig.getValue("/messagesQueryEndPoint").toString())
+                        .header("Authorization", "Bearer " + token)
+                        .asString();
+                getBaseRequestSpecification();
+                int numberOfUnreadEmails = new JSONObject(response.getBody()).getInt("resultSizeEstimate");
 
-            if (numberOfUnreadEmails > 0) {
-                return true;
+                if (numberOfUnreadEmails > 0) {
+                    return true;
+                }
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                logger.error(e);
             }
-            Thread.sleep(1000);
         }
         return false;
     }
+
 
 }

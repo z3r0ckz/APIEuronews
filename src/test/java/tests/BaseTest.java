@@ -11,7 +11,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 
-import javax.naming.AuthenticationException;
 
 public abstract class BaseTest {
 
@@ -24,13 +23,8 @@ public abstract class BaseTest {
         logger = Logger.getInstance();
         //ConnectAPI.getAuthorizationCode();
         //ConnectAPI.connectGmailAPI();
-        try {
-            Integer emailsMarkedAsRead = GmailUtils.markAllEmailsAsRead();
-            logger.info("Number of emails marked as 'read' before testing begins: " + emailsMarkedAsRead);
-        } catch (AuthenticationException e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
+        Integer emailsMarkedAsRead = GmailUtils.markAllEmailsAsRead();
+        logger.info("Number of emails marked as 'read' before testing begins: " + emailsMarkedAsRead);
 
     }
 

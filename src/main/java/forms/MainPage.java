@@ -6,13 +6,13 @@ import org.openqa.selenium.By;
 
 public class MainPage extends Form {
     public MainPage() {
-        super(By.xpath("//a[@aria-label='Euronews Logo']//h1//*[name()='svg']"),"Euronews Main Page");
+        super(By.xpath("//h2[normalize-space()='Featured']"),"Euronews Main Page");
     }
     //------Locators---------
     private final IButton btnAcceptCookies = getElementFactory().getButton(
             By.xpath("//button[@id='didomi-notice-agree-button']"),"accept cookies button");
     private final IButton btnNewsLetter = getElementFactory().getButton(
-            By.xpath("//span[@class='u-margin-start-1'][normalize-space()='Newsletters']"),"Newsletter button");
+            By.xpath("//a[normalize-space()='Newsletters']"),"Newsletter button");
 
     //------Methods------------
     public void acceptCookies(){ btnAcceptCookies.clickAndWait();}

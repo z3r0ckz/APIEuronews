@@ -8,7 +8,6 @@ import forms.UnsubscribePage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import javax.naming.AuthenticationException;
 
 public class GmailApiTest extends BaseTest {
     @Test
@@ -30,29 +29,17 @@ public class GmailApiTest extends BaseTest {
         logger.info("Step 4 - Enter email, click submit button");
         newsletterPage.enterEmailSubsForm(testData.getValue("/email").toString());
         newsletterPage.clickSubmitButton();
-        try {
-            Assert.assertTrue(GmailUtils.isNewMailExists(), "no new email with a request to confirm subscription");
-        } catch (InterruptedException e) {
-            logger.error("waiting for new mail interrupted");
-            throw new RuntimeException(e);
-        }
+        Assert.assertTrue(GmailUtils.isNewMailExists(), "no new email with a request to confirm subscription");
 
         logger.info("Step 5 -  Follow the link received from the letter");
-        try {
-            String urlToConfirmSubscription = GmailUtils.getUrlToConfirmSubscription();
-            browser.goTo(urlToConfirmSubscription);
-        } catch (AuthenticationException e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
+        String urlToConfirmSubscription = GmailUtils.getUrlToConfirmSubscription();
+        browser.goTo(urlToConfirmSubscription);
+
         SubscriptionConfirmedPage subscriptionConfirmedPage = new SubscriptionConfirmedPage();
         Assert.assertTrue(subscriptionConfirmedPage.state().waitForDisplayed(), "page with subscription confirmation was not displayed");
         logger.info("Marking all Euro News new mails as read");
-        try {
-            GmailUtils.markAllEmailsAsRead();
-        } catch (AuthenticationException e) {
-            throw new RuntimeException(e);
-        }
+        GmailUtils.markAllEmailsAsRead();
+
         logger.info("Step 6 - Click Back to the site");
         subscriptionConfirmedPage.clickOnBackToTheSiteButton();
         Assert.assertTrue(mainPage.state().waitForDisplayed(), "home page was not displayed");
@@ -73,11 +60,7 @@ public class GmailApiTest extends BaseTest {
         Assert.assertTrue(unsubscribePage.isUnsubscribeMessageExists(), "unsubscribe message has not appeared");
 
         logger.info("Step 10 - Make sure that you haven't received an email with a message about canceling your subscription");
-        try {
-            Assert.assertFalse(GmailUtils.isNewMailExists());
-        } catch (InterruptedException e) {
-            logger.error("waiting for new mail interrupted");
-            throw new RuntimeException(e);
-        }
+        Assert.assertFalse(GmailUtils.isNewMailExists());
+
     }
 }

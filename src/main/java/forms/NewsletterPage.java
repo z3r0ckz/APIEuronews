@@ -30,9 +30,10 @@ public class NewsletterPage extends Form {
     private final ITextBox openNewsletterPreview = getElementFactory().getTextBox(
             By.xpath("//div[contains(@id, '_previews') and contains(@style, 'opacity: 1') and not(contains(@style, 'display: none'))]"), "currently open newsletter preview");
 
+    private ITextBox randomNewsletter = null;
     //--------Methods------
     public String selectRandomNewsletter() {
-        ITextBox randomNewsletter = boxListNewsletter.get(RandomUtils.getRandomIntInRange(boxListNewsletter.size()));
+        randomNewsletter = boxListNewsletter.get(RandomUtils.getRandomIntInRange(boxListNewsletter.size()));
         logger.info("Subscribing to: " + randomNewsletter.findChildElement(By.xpath("//h2"),ITextBox.class).getText());
         //click in the submit button of the child element
         randomNewsletter.findChildElement(By.xpath
